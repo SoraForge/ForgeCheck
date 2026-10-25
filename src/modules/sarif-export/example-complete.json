@@ -1,0 +1,1 @@
+{"status":"complete","filesScanned":2,"rulesEvaluated":1,"findings":[{"ruleId":"STELLAR-001","message":"Check compatibility of transaction signature","confidence":"review-required","severity":"medium","file":"src/transactions.ts","line":10}]}
