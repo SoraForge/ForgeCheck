@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {"id":"case-positive-1","operation":"scan","versions":{"sdk":"1.0"},"expectedFindingIds":["sdk.version"],"intentionalNegative":false,"reportFile":"case-positive-1.json"},
+    {"id":"case-positive-2","operation":"scan","versions":{"sdk":"1.1"},"expectedFindingIds":["rpc.method"],"intentionalNegative":false,"reportFile":"case-positive-2.json"},
+    {"id":"case-negative-1","operation":"scan","versions":{"sdk":"2.0"},"expectedFindingIds":[],"intentionalNegative":true,"reportFile":"case-negative-1.json"},
+    {"id":"case-negative-2","operation":"scan","versions":{"sdk":"2.1"},"expectedFindingIds":[],"intentionalNegative":true,"reportFile":"case-negative-2.json"},
+    {"id":"case-unavailable","operation":"scan","versions":{"sdk":"legacy"},"expectedFindingIds":["sdk.version"],"intentionalNegative":false,"reportFile":"case-unavailable.json"}
+  ]
+}
