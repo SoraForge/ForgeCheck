@@ -1,0 +1,28 @@
+{
+  "status": "complete",
+  "filesScanned": 14,
+  "rulesEvaluated": 6,
+  "findings": [
+    {
+      "ruleId": "SOROBAN-SDK-001",
+      "message": "Deprecated Soroban RPC getTransactionStatus call detected; migrate to getTransaction.",
+      "confidence": "confirmed-failure",
+      "file": "src/rpc/client.ts",
+      "line": 42,
+      "column": 11,
+      "severity": "high",
+      "evidenceUrls": [
+        "https://developers.stellar.org/docs/data/rpc/api-reference/methods/getTransaction"
+      ],
+      "remediation": "Replace getTransactionStatus with getTransaction and handle NOT_FOUND status."
+    },
+    {
+      "ruleId": "HORIZON-DEP-004",
+      "message": "Fee bump inner transaction signature weight should be verified against Protocol 21 rules.",
+      "confidence": "review-required",
+      "file": "src/tx/feebump.ts",
+      "line": 18,
+      "severity": "medium"
+    }
+  ]
+}
