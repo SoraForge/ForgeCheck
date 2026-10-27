@@ -1,0 +1,15 @@
+{
+  "status": "complete",
+  "filesScanned": 8,
+  "rulesEvaluated": 4,
+  "findings": [
+    {
+      "ruleId": "STELLAR-TOML-002",
+      "message": "Signing key rotation schedule is not declared in stellar.toml metadata.",
+      "confidence": "review-required",
+      "file": "src/config/stellar.ts",
+      "line": 19,
+      "severity": "low"
+    }
+  ]
+}
