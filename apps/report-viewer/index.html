@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"
+    />
+    <title>ForgeCheck Local Report Viewer</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="top-bar">
+      <div class="brand-block">
+        <h1>ForgeCheck Report Viewer</h1>
+        <p class="subtitle">
+          Offline browser inspector for local <code>ScanResult</code> compatibility reports (zero network calls)
+        </p>
+      </div>
+      <div class="import-actions">
+        <label class="file-upload-btn" for="report-file-input">
+          Import ScanResult JSON
+        </label>
+        <input
+          id="report-file-input"
+          type="file"
+          accept=".json,application/json"
+          aria-label="Import local ForgeCheck JSON report"
+        />
+        <button id="load-sample-complete" type="button" class="secondary-btn">
+          Load Complete Sample
+        </button>
+        <button id="load-sample-unavailable" type="button" class="secondary-btn">
+          Load Unavailable Sample
+        </button>
+        <button id="export-btn" type="button" class="primary-btn" disabled>
+          Export Filtered JSON
+        </button>
+      </div>
+    </header>
+
+    <main class="main-container">
+      <div class="status-strip">
+        <span id="loaded-source-label" class="source-pill">No report loaded</span>
+        <span class="privacy-note">Local-only File API processing · Max file size: 5 MiB</span>
+      </div>
+
+      <div id="validation-alert" class="alert-banner" role="alert" aria-live="assertive" hidden></div>
+
+      <section id="empty-initial-screen" class="state-card">
+        <h2>Inspect a Local Compatibility Report</h2>
+        <p>
+          Select a local ForgeCheck <code>ScanResult</code> JSON file above, or load one of the built-in offline fixtures to explore findings, filter by confidence, and export filtered subsets.
+        </p>
+      </section>
+
+      <section id="unavailable-screen" class="state-card unavailable-card" aria-live="polite" hidden>
+        <div class="badge confidence-confirmed-failure">Scan Status: Unavailable</div>
+        <h2>Compatibility Scan Did Not Complete</h2>
+        <p>
+          This report indicates that the scanner was unavailable or could not evaluate the target project. Do not treat an unavailable scan as a clean pass.
+        </p>
+        <div class="reason-box">
+          <strong>Reported Reason:</strong>
+          <p id="unavailable-reason"></p>
+        </div>
+      </section>
+
+      <section id="complete-screen" hidden>
+        <div class="summary-grid" aria-label="Report summary metrics">
+          <div class="metric-card">
+            <span class="metric-label">Total Findings</span>
+            <strong id="stat-total" class="metric-value">0</strong>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Confirmed Failures</span>
+            <strong id="stat-confirmed" class="metric-value text-danger">0</strong>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Review Required</span>
+            <strong id="stat-review" class="metric-value text-warning">0</strong>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Not Evaluated</span>
+            <strong id="stat-not-eval" class="metric-value text-muted">0</strong>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Matching Filter</span>
+            <strong id="stat-matching" class="metric-value text-accent">0</strong>
+          </div>
+        </div>
+
+        <form class="filter-bar" aria-label="Filter and group findings" onsubmit="return false;">
+          <div class="filter-field">
+            <label for="search-input">Search text</label>
+            <input
+              id="search-input"
+              type="search"
+              placeholder="Filter by rule ID, file, message..."
+              autocomplete="off"
+            />
+          </div>
+          <div class="filter-field">
+            <label for="confidence-filter">Confidence</label>
+            <select id="confidence-filter">
+              <option value="all">All confidences</option>
+              <option value="confirmed-failure">confirmed-failure</option>
+              <option value="review-required">review-required</option>
+              <option value="not-evaluated">not-evaluated</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label for="severity-filter">Severity</label>
+            <select id="severity-filter">
+              <option value="all">All severities</option>
+              <option value="critical">critical</option>
+              <option value="high">high</option>
+              <option value="medium">medium</option>
+              <option value="low">low</option>
+              <option value="info">info</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label for="group-by-select">Group by</label>
+            <select id="group-by-select">
+              <option value="none">No grouping</option>
+              <option value="rule">Rule ID</option>
+              <option value="file">File path</option>
+            </select>
+          </div>
+        </form>
+
+        <div id="no-matches-banner" class="state-card empty-matches" role="status" hidden></div>
+
+        <div class="workspace-split">
+          <div id="findings-groups-container" class="findings-column" aria-label="Filtered findings"></div>
+          <aside class="detail-column" aria-label="Selected finding details">
+            <h2>Finding Details</h2>
+            <div id="finding-detail-content"></div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./app.mjs"></script>
+  </body>
+</html>

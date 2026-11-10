@@ -1,0 +1,37 @@
+{
+  "status": "complete",
+  "filesScanned": 18,
+  "rulesEvaluated": 9,
+  "findings": [
+    {
+      "ruleId": "SOROBAN-RPC-001",
+      "message": "Deprecated getTransactionStatus method detected; migrate to getTransaction.",
+      "confidence": "confirmed-failure",
+      "file": "src/rpc/client.ts",
+      "line": 42,
+      "column": 9,
+      "severity": "high",
+      "remediation": "Update Soroban RPC client calls to use getTransaction and handle NOT_FOUND.",
+      "evidenceUrls": [
+        "https://developers.stellar.org/docs/data/rpc/api-reference/methods/getTransaction"
+      ]
+    },
+    {
+      "ruleId": "HORIZON-FEE-003",
+      "message": "Hardcoded base fee (100 stroops) may underbid during network surge pricing.",
+      "confidence": "review-required",
+      "file": "src/tx/builder.ts",
+      "line": 88,
+      "severity": "medium",
+      "remediation": "Query fee_stats or configure a dynamic maximum fee ceiling."
+    },
+    {
+      "ruleId": "SEP-0010-AUTH",
+      "message": "Client domain verification optional branch was not statically evaluated.",
+      "confidence": "not-evaluated",
+      "file": "src/auth/sep10.ts",
+      "line": 15,
+      "severity": "info"
+    }
+  ]
+}

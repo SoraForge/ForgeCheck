@@ -1,0 +1,4 @@
+{
+  "status": "unavailable",
+  "reason": "Offline repository snapshot did not include Cargo.lock or package.json manifests."
+}
