@@ -1,0 +1,11 @@
+{
+  "status": "complete",
+  "findings": [
+    {
+      "ruleId": "",
+      "message": "Invalid finding fixture with bad confidence and non-positive line",
+      "confidence": "definitely-broken",
+      "line": 0
+    }
+  ]
+}

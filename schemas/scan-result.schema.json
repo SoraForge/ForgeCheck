@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://soraforge.github.io/ForgeCheck/schemas/scan-result/v1.0.0/scan-result.schema.json",
+  "title": "ForgeCheck ScanResult",
+  "description": "JSON Schema Draft 2020-12 specification for ForgeCheck ScanResult payloads as defined in src/contracts.ts.",
+  "x-schema-version": "1.0.0",
+  "type": "object",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/UnavailableScanResult"
+    },
+    {
+      "$ref": "#/$defs/CompleteScanResult"
+    }
+  ],
+  "$defs": {
+    "FindingConfidence": {
+      "type": "string",
+      "enum": [
+        "confirmed-failure",
+        "review-required",
+        "not-evaluated"
+      ],
+      "description": "Confidence classification for a compatibility finding."
+    },
+    "FindingSeverity": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low",
+        "info"
+      ],
+      "description": "Optional severity level for a compatibility finding."
+    },
+    "RelativeFilePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!\\\\)(?![A-Za-z]:)(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$))(?!.*//)(?!.*[\\u0000-\\u001F\\u007F]).+$",
+      "description": "Relative project path without root prefixes, drive letters, parent directory traversal, or control characters."
+    },
+    "ScanFinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ruleId",
+        "message",
+        "confidence"
+      ],
+      "dependentRequired": {
+        "line": [
+          "file"
+        ],
+        "column": [
+          "file",
+          "line"
+        ]
+      },
+      "properties": {
+        "ruleId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+          "description": "Stable identifier for the compatibility rule."
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^[^\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F]+$",
+          "description": "Human-readable explanation of the finding."
+        },
+        "confidence": {
+          "$ref": "#/$defs/FindingConfidence"
+        },
+        "file": {
+          "$ref": "#/$defs/RelativeFilePath"
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000,
+          "description": "1-indexed source line number where the finding occurred."
+        },
+        "column": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100000,
+          "description": "1-indexed source column number where the finding occurred."
+        },
+        "severity": {
+          "$ref": "#/$defs/FindingSeverity"
+        },
+        "evidenceUrls": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "format": "uri",
+            "minLength": 8,
+            "maxLength": 2048,
+            "pattern": "^https?://[^\\s\\u0000-\\u001F\\u007F]+$"
+          },
+          "description": "Optional HTTP(S) reference links supporting the compatibility finding."
+        },
+        "remediation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^[^\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F]+$",
+          "description": "Optional actionable remediation guidance."
+        }
+      }
+    },
+    "UnavailableScanResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "reason"
+      ],
+      "properties": {
+        "status": {
+          "const": "unavailable"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "pattern": "^(?=.*\\S)[^\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F]+$",
+          "description": "Non-empty explanation for why the scan result is unavailable."
+        }
+      }
+    },
+    "CompleteScanResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "findings"
+      ],
+      "properties": {
+        "status": {
+          "const": "complete"
+        },
+        "findings": {
+          "type": "array",
+          "maxItems": 10000,
+          "items": {
+            "$ref": "#/$defs/ScanFinding"
+          }
+        },
+        "filesScanned": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000000
+        },
+        "rulesEvaluated": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        }
+      }
+    }
+  }
+}
