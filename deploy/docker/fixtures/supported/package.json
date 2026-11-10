@@ -1,0 +1,8 @@
+{
+  "name": "forgecheck-docker-positive-fixture",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@stellar/stellar-sdk": "17.2.1"
+  }
+}
