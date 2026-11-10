@@ -1,0 +1,14 @@
+# Dockerfile-specific allowlist: never transmit secrets, host dependencies, Git
+# metadata or the scanned project to the image build context.
+**
+!package.json
+!package-lock.json
+!tsconfig.json
+!LICENSE
+!scripts/
+!scripts/clean-build.mjs
+!src/
+!src/**
+!deploy/
+!deploy/docker/
+!deploy/docker/**
