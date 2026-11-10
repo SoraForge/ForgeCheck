@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "fingerprint": "218d831bbe242b3839bca27215199d015953c5933759ce3fb6ba34a4e8fd1cd4",
+      "ruleId": "STELLAR-TOML-002",
+      "file": "src/config/stellar.ts",
+      "rationale": "Reviewed by custody engineering: external HSM handles key rotation off-repo.",
+      "owner": "security-team@soraforge.example",
+      "expiresAt": "2027-01-01T00:00:00Z"
+    }
+  ]
+}
